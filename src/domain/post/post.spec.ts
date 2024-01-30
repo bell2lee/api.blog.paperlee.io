@@ -3,6 +3,25 @@ import { PostComment } from './post-comment';
 
 describe('./post', () => {
   describe('Post', () => {
+    describe('id', () => {
+      it('should return id', () => {
+        const post = new Post({
+          id: 'id',
+          comments: [],
+        });
+        expect(post.id).toEqual('id');
+      });
+    });
+    describe('comments', () => {
+      it('should return comments', () => {
+        const post = new Post({
+          id: 'id',
+          comments: [new PostComment('author', 'content')],
+        });
+        expect(post.comments).toEqual([new PostComment('author', 'content')]);
+      });
+    });
+
     describe('addComment', () => {
       it('should apply CommentAddedEvent', () => {
         const post = new Post({

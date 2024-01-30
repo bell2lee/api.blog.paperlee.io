@@ -6,10 +6,17 @@ export class Post extends BaseAggregateRoot<`posts/${string}`, any> {
   constructor(
     private _data: {
       readonly id: string;
+      readonly content?: string;
       comments: PostComment[];
     },
   ) {
     super();
+  }
+  get id() {
+    return this._data.id;
+  }
+  get comments() {
+    return this._data.comments;
   }
 
   addComment(comment: PostComment) {

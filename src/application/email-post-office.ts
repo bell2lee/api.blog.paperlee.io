@@ -1,3 +1,10 @@
+export type Email = `${string}@${string}.${string}` | string;
+
 export interface EmailPostOffice {
-  sendEmail: (email: string) => void;
+  sendEmail: (message: {
+    to: Email;
+    subject: string;
+    content: string;
+    from: Email;
+  }) => void;
 }
