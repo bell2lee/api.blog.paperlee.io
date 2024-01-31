@@ -21,6 +21,16 @@ describe('./post', () => {
         expect(post.comments).toEqual([new PostComment('author', 'content')]);
       });
     });
+    describe('content', () => {
+      it('should return content', () => {
+        const post = new Post({
+          id: 'id',
+          content: 'content',
+          comments: [],
+        });
+        expect(post.content).toEqual('content');
+      });
+    });
 
     describe('addComment', () => {
       it('should apply CommentAddedEvent', () => {

@@ -6,5 +6,5 @@ export interface EmailPostOffice {
     subject: string;
     content: string;
     from: Email;
-  }) => void;
+  }) => Promise<void>;
 }
