@@ -31,7 +31,13 @@ describe('./create-post.command', () => {
       mockIsExist.mockResolvedValue(false);
       await subject.execute(new CreatePostCommand('test', 'test-content'));
       expect(mockSave).toBeCalledWith(
-        new Post({ id: 'test', content: 'test-content', comments: [] }),
+        expect.objectContaining({
+          _data: {
+            comments: [],
+            content: 'test-content',
+            id: 'test',
+          },
+        }),
       );
     });
   });

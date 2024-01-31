@@ -7,5 +7,9 @@ export class CommentAddedEvent
   constructor(
     public readonly topic: `posts/${string}/added-comment`,
     public readonly message: PostComment,
+    public readonly meta: {
+      publishedAt: number;
+      publishedBy: string;
+    },
   ) {}
 }

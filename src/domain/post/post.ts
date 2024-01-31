@@ -19,7 +19,7 @@ export class Post extends AggregateRoot {
       comments: [],
     };
     for (const event of eventSources) {
-      this.apply(event, true);
+      this.applyEventSource(event, true);
     }
   }
 
@@ -39,7 +39,7 @@ export class Post extends AggregateRoot {
 
   private applyEventSource(event: PostEventSource, fromHistory?: boolean) {
     if (
-      event.topic === 'posts/${this._data.id}/added-comment' &&
+      event.topic === `posts/${this._data.id}/added-comment` &&
       event instanceof CommentAddedEvent
     ) {
       this._data.comments.push(
@@ -54,7 +54,7 @@ export class Post extends AggregateRoot {
       throw new Error(`Unknown event source topic: ${event.topic}`);
     }
 
-    super.apply(event, fromHistory);
+    super.apply(event, { fromHistory, skipHandler: fromHistory });
   }
   get id() {
     return this._data.id;
@@ -67,9 +67,11 @@ export class Post extends AggregateRoot {
   }
 
   addComment(comment: PostComment): this {
-    this._data.comments.push(comment);
     this.applyEventSource(
-      new CommentAddedEvent(`posts/${this._data.id}/added-comment`, comment),
+      new CommentAddedEvent(`posts/${this._data.id}/added-comment`, comment, {
+        publishedAt: Date.now(),
+        publishedBy: comment.author,
+      }),
     );
     return this;
   }

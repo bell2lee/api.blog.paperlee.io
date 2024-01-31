@@ -24,8 +24,6 @@ export class CreatePostCommandHandler
     if (isExist) {
       throw new PostCommandError('Post already exists');
     }
-    await this.repository.save(
-      new Post({ id: command.id, content: command.content, comments: [] }),
-    );
+    await this.repository.save(Post.newPost(command.id, command.content));
   }
 }
