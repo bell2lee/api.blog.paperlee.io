@@ -2,6 +2,7 @@ import { Post } from '../../../domain/post/post';
 import { PostCommandRepository } from './post.command.repository';
 import { ICommandHandler } from '@nestjs/cqrs';
 import { PostCommandError } from './post.command.error';
+import { Inject } from '@nestjs/common';
 
 export class CreatePostCommand {
   constructor(
