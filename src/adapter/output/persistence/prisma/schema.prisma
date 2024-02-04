@@ -8,29 +8,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model BlogEntity {
+model Blog {
   id    String   @id
   name  String
 }
 
-model PostEntity {
+model PostEvent {
   blogId    String
-  id        String @unique
-  title     String
-  content   String?
-  comments  PostCommentEntity[]
+  postId    String
+  id        BigInt        @default(autoincrement())
+  type      String
+  message   Json
+  meta      Json
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@id([blogId, id])
+  @@index([blogId, postId])
+}
+
+model PostAggregateVersion {
+  blogId  String
+  postId  String
+  id      BigInt        @default(autoincrement())
+  version BigInt
   @@id([blogId, id])
 }
-
-model PostCommentEntity {
-  id      Int    @id @default(autoincrement())
-  author  String
-  content String
-  postId  String
-  post    PostEntity   @relation(fields: [postId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-

@@ -8,12 +8,17 @@ describe('./post-comment', () => {
       ['author', ''],
       ['', ''],
     ])('should throw Comment Error when not set author', (author, content) => {
-      expect(() => new PostComment(author, content)).toThrow(CommentError);
+      expect(() => new PostComment(1, author, content, new Date())).toThrow(
+        CommentError,
+      );
     });
     it('should has author and cotent when author and content set', () => {
-      expect(new PostComment('author', 'content')).toEqual({
+      const now = new Date();
+      expect(new PostComment(1, 'author', 'content', now)).toEqual({
+        id: 1,
         author: 'author',
         content: 'content',
+        createdAt: now,
       });
     });
   });

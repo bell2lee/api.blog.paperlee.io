@@ -13,6 +13,7 @@ export class PostCreatedEvent
   constructor(
     public readonly topic: `posts/${string}/created`,
     public readonly message: {
+      blogId: string;
       id: string;
       content: string;
     },

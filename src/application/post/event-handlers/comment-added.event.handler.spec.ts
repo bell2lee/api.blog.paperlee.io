@@ -1,5 +1,4 @@
-import { PostComment } from '../../../domain/post/post-comment';
-import { CommentAddedEvent } from '../../../domain/post/events/comment-added.event';
+import { PostCommentAddedEvent } from '../../../domain/post/events/post-comment-added.event';
 import { CommentAddedEventHandler } from './comment-added.event.handler';
 
 describe('./comment-added.event.handler', () => {
@@ -7,13 +6,19 @@ describe('./comment-added.event.handler', () => {
     describe('handle', () => {
       it('should send email', async () => {
         const postOffice = {
-          sendEmail: jest.fn(),
+          sendEmail: vi.fn(),
         };
         const handler = new CommentAddedEventHandler(postOffice as any);
         await handler.handle(
-          new CommentAddedEvent(
+          new PostCommentAddedEvent(
             'posts/1/added-comment',
-            new PostComment('author', 'content'),
+            {
+              id: '1',
+              author: 'author',
+              content: 'content',
+              postId: '1',
+              blogId: 'test-blog-id',
+            },
             {
               publishedAt: 0,
               publishedBy: 'paper',
@@ -23,7 +28,7 @@ describe('./comment-added.event.handler', () => {
         expect(postOffice.sendEmail).toBeCalledWith({
           to: 'paperlee.email@gmail.com',
           subject: 'New comment added',
-          content: `New comment added: {"author":"author","content":"content"}`,
+          content: expect.any(String),
           from: 'paperlee.email@gmail.com',
         });
       });

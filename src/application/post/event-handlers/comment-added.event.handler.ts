@@ -1,13 +1,13 @@
 import { IEventHandler } from '@nestjs/cqrs';
-import { CommentAddedEvent } from '../../../domain/post/events/comment-added.event';
+import { PostCommentAddedEvent } from '../../../domain/post/events/post-comment-added.event';
 import { EmailPostOffice } from '../../email-post-office';
 
 export class CommentAddedEventHandler
-  implements IEventHandler<CommentAddedEvent>
+  implements IEventHandler<PostCommentAddedEvent>
 {
   constructor(private readonly postOffice: EmailPostOffice) {}
 
-  async handle(event: CommentAddedEvent) {
+  async handle(event: PostCommentAddedEvent) {
     await this.postOffice.sendEmail({
       to: 'paperlee.email@gmail.com',
       subject: 'New comment added',

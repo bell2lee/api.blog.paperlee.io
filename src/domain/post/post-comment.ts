@@ -7,8 +7,10 @@ export class CommentError extends BaseDomainError {
 }
 export class PostComment {
   constructor(
+    public readonly id: number,
     public readonly author: string,
     public readonly content: string,
+    public readonly createdAt: Date,
   ) {
     if (!author.trim() || !content.trim()) {
       throw new CommentError('Author and content must not be empty');
