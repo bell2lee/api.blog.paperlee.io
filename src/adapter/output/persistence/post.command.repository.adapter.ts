@@ -1,6 +1,6 @@
 import { PostCommandRepository } from '../../../application/post/commands/post.command.repository';
 import { Injectable } from '@nestjs/common';
-import { Post } from '../../../domain/post/post';
+import { Post, PostEventSource } from '../../../domain/post/post';
 import { PrismaService } from './prisma/prisma.service';
 import { PostEventRepository } from './post-event.repository';
 
@@ -22,9 +22,6 @@ export class PostCommandRepositoryAdapter implements PostCommandRepository {
   }
   async save(post: Post): Promise<void> {
     const uncommittedEvents = post.getUncommittedEvents();
-    console.log('uncommittedEvents', uncommittedEvents);
-    await this.eventRepository.save(uncommittedEvents);
-
-    throw new Error('Method not implemented.');
+    await this.eventRepository.save(uncommittedEvents as PostEventSource[]);
   }
 }

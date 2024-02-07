@@ -36,30 +36,27 @@ export class PostEventRepository {
     }
   }
 
-  private topicToType(topic: string) {
-    if (topic.includes('posts/id/created')) {
+  private topicToType(event: PostEventSource): PostEventType {
+    if (event instanceof PostCreatedEvent) {
       return PostEventType.CREATED_POST;
     }
-    if (topic.includes('added-comment')) {
+    if (event instanceof PostCommentAddedEvent) {
       return PostEventType.COMMENT_ADDED;
     }
     throw new Error('Invalid event topic');
   }
 
   async save(events: Array<PostEventSource>) {
-    for (const event of events) {
-      const eventType = this.topicToType(event.topic);
-
-      await this.prisma.postEvent.create({
-        data: {
-          blogId: event.message.id,
-          postId: event.message.id,
-          type: eventType,
-          message: event.message,
-          meta: event.meta,
-        },
-      });
-    }
+    await this.prisma.postEvent.createMany({
+      data: events.map((event) => ({
+        blogId: event.message.blogId,
+        postId: String(event.message.id),
+        type: this.topicToType(event),
+        message: event.message,
+        meta: event.meta,
+      })),
+      skipDuplicates: false,
+    });
   }
 
   async listCreatedPostEvents(

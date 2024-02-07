@@ -10,18 +10,17 @@ describe('./post.query.repository.adapter', () => {
   } as any);
   describe('get', () => {
     it('should return a post', async () => {
-      mockListEvents.mockResolvedValue(
+      mockListEvents.mockResolvedValue([
         new PostCreatedEvent(
           `posts/1/created`,
           { blogId: 'test-blog-id', id: '1', content: 'test' },
           { publishedAt: 1706967718000, publishedBy: 'paper' },
         ),
-      );
+      ]);
       const post = await subject.get('test-blog-id', '1');
       expect(post).toEqual({
         id: '1',
         createdAt: 1706967718000,
-        updatedAt: null,
         content: 'test',
         comments: [],
       });
