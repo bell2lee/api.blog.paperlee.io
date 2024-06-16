@@ -2,6 +2,7 @@ import { beforeEach } from 'vitest';
 import { PostController } from './post.controller';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ListPostQuery } from '../../../application/post/queries/list-post.query';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 describe('./post.controller', () => {
   const mockQueryBusExecute = vi.fn();
@@ -9,16 +10,17 @@ describe('./post.controller', () => {
   let postController: PostController;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [],
       controllers: [PostController],
       providers: [
         {
-          provide: 'QueryBus',
+          provide: QueryBus,
           useValue: {
             execute: mockQueryBusExecute,
           },
         },
         {
-          provide: 'CommandBus',
+          provide: CommandBus,
           useValue: {
             execute: mockCommandBusExecute,
           },
@@ -42,6 +44,6 @@ describe('./post.controller', () => {
       );
     });
   });
-  describe('GET /blogs/:blogId/posts/:id', () => {});
-  describe('POST /blogs/:blogId/posts', () => {});
+  // describe('GET /blogs/:blogId/posts/:id', () => {});
+  // describe('POST /blogs/:blogId/posts', () => {});
 });
